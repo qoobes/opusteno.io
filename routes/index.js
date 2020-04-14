@@ -1,9 +1,16 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express')
+const router = express.Router()
+const temps = require('../templ')
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
-});
+// The Simple routes
+
+router.get('/', (req, res, next) => {
+  // I will override the inputValue part of temps if the user already has a session
+  res.render('index', { temps })
+})
+
+router.get('/about', (req, res, next) => {
+  res.render('about', { temps })
+})
 
 module.exports = router;
