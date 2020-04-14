@@ -1,11 +1,139 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-  </head>
-  <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
-  </body>
+<html lang="en">
+
+<%- temps.head %>
+
+<body id="page-top">
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg bg-secondary text-uppercase text-dark fixed-top" id="mainNav" style="  background-color: rgba(234, 255, 229, 1) !important;
+                                                                                          ">
+        <div class="container">
+            <a class="navbar-brand js-scroll-trigger text-dark" href="#page-top"><%= temps.title %></a>
+            <button
+                class="navbar-toggler navbar-toggler-right text-uppercase font-weight-bold bg-white text-dark rounded"
+                type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive"
+                aria-expanded="false" aria-label="Toggle navigation">
+                <img src="img/bar.png" alt="" width="20px">
+            </button>
+            <div class="collapse navbar-collapse text-dark" id="navbarResponsive">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item mx-0 mx-lg-1">
+                        <a class="nav-link py-3 px-0 px-lg-3 text-dark rounded js-scroll-trigger"
+                            href="#getStarted">Zapocnite</a>
+                    </li>
+                    <li class="nav-item mx-0 mx-lg-1">
+                        <a class="nav-link py-3 px-0 px-lg-3 text-dark rounded js-scroll-trigger" href="#about">O
+                            Projektu</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- Masthead -->
+    <header class="masthead bg-primary text-white text-center" id="headrr">
+        <div class="container d-flex align-items-center flex-column">
+            <h1 class="page-section-heading text-center text-uppercase text-dark"><%= temps.title %></h1>
+            <!-- Icon Divider -->
+            <div class="divider-custom divider-dark">
+                <div class="divider-custom-line"></div>
+                <div class="divider-custom-icon">
+                    <img src="img/logo.png" alt="School logo" width="50px">
+                </div>
+                <div class="divider-custom-line"></div>
+            </div>
+            <!-- Masthead Subheading -->
+            <p class="masthead-subheading font-weight-bold mb-0 text-dark">
+                <3</p> </div> <div class="container">
+                    <!-- <form method="post"> -->
+                    <!--     <br> -->
+                    <!--     <div class="col-12"> -->
+                    <!--         <input id="email" name="email" type="email" required placeholder="E-Mail"> -->
+                    <!--     </div> -->
+                    <!--     <br> -->
+                    <!--     <br> -->
+                    <!--     <a href="form"><button formaction="form" class="basicButton">POSALJI MAIL</button></a> -->
+                    <!-- </form> -->
+                    <%- temps.inputValue %>
+        </div>
+    </header>
+
+    <!-- About Section -->
+    <section class="page-section bg-white text-dark mb-0" id="getStarted">
+        <div class="container">
+            <!-- About Section Heading -->
+            <h2 class="page-section-heading text-center text-uppercase text-dark">Kako zapoceti?</h2>
+            <!-- Icon Divider -->
+            <div class="divider-custom divider-dark">
+                <div class="divider-custom-line"></div>
+                <div class="divider-custom-icon">
+                    <img src="img/handshake.png" alt="Opusteno logo" width="50px">
+                </div>
+                <div class="divider-custom-line"></div>
+            </div>
+            <!-- About Section Content -->
+            <!-- <p class="lead">Unesite <strong>email od vaseg e-dnevnika</strong> u kutiju gore. Potvrdite email klikom dugmeta koje dobijete i bicete verifikovani za komunikaciju!</p> -->
+            <center>
+                <p class="lead">Sve sto trebate da uradite je da unesete svoj <i>e-dnevnik email</i> u form gore,
+                    potvrdite tako
+                    sto kliknete na link koji cete dobiti na njemu</p>
+                <p class="lead">Nakon ovoga, trebali biste biti ulogovani u sistem i spremni da komunicirate!</p>
+
+            </center>
+            <br>
+            <center><a href="#page-top" class="basicButton js-scroll-trigger">SAZNAJ VIŠE</a></center>
+
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="page-section bg-primary text-white mb-0" id="about">
+        <div class="container">
+            <!-- About Section Heading -->
+            <h2 class="page-section-heading text-center text-uppercase text-white">O projektu</h2>
+            <!-- Icon Divider -->
+            <div class="divider-custom divider-light">
+                <div class="divider-custom-line"></div>
+                <div class="divider-custom-icon">
+                    <img src="img/handshake-white.png" alt="School logo" width="50px">
+                </div>
+                <div class="divider-custom-line"></div>
+            </div>
+            <!-- About Section Content -->
+            <center>
+                <p class="lead">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+                    incididunt ut
+                    labore et dolore magna aliqua. Ut enim ad minim</p>
+            </center>
+            <br>
+            <center><a href="about" class="basicButton invertButton">SAZNAJ VIŠE</a></center>
+
+        </div>
+    </section>
+
+
+
+    <!-- Copyright Section -->
+    <section class="copyright py-4 text-center text-white">
+        <%- temps.footer %>
+    </section>
+    <!-- Scroll to Top Button (Only visible on small and extra-small screen sizes) -->
+    <div class="scroll-to-top d-lg-none position-fixed ">
+        <a class="js-scroll-trigger d-block text-center text-white rounded" href="#page-top">
+            <i class="fa fa-chevron-up"></i>
+        </a>
+    </div>
+
+    <!-- Bootstrap core JavaScript -->
+    <!-- <script src="vendor/jquery/jquery.min.js"></script> -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"
+        integrity="sha384-6khuMg9gaYr5AxOqhkVIODVIvm9ynTT5J4V1cfthmT+emCG6yVmEZsRHdxlotUnm" crossorigin="anonymous">
+    </script>
+    <!-- Plugin JavaScript -->
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+    <!-- Custom scripts for this template -->
+    <script src="js/base.js"></script>
+</body>
+
 </html>
