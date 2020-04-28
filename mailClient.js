@@ -20,28 +20,49 @@ function is2gimnazija(email) {
 const secret = process.env.JWT_SECRET // JWT Secret, will be used once i implement it
 
 // TODO:
-// Make authentication work
 // implement emails not being sent twice in a row
+// Make authentication work
 
-const sendConfirmation = email => {
+
+const sendConfirmation = (email, sentMails, sentMailTimestamps) => {
   if (!is2gimnazija(email)) return { code: 1005, message: 'Not a 2gimnazija email' }
-  let mailOptions = {
-    from,
-    to: email,
-    subject: 'Please confirm your email for opusteno.io',
-    text: '<a href="https://link.com">This is a lilnk to the confirmation thing</a>'
+
+  let mailIndex = sentMails.indexOf(email) // Get where the mail is; returns -1 if not found
+
+  if (mailIndex !== -1) {
+    let age = Date.now() - sentMailTimestamps[mailIndex] // Get the sentmail's age
+    // If it's younger than 5 minutes, tell user to wait
+    if (age < 300000) return {code: 1010, message: 'Wait 5 minutes to send another mail.'}
+    // Remove the email and timestamp from the lit
+    sentMails.splice(mailIndex)
+    sentMailTimestamps.splice(mailIndex)
   }
 
+  // Just where we sending to bois
+  let mailOptions = {
+    from,
+    // to: email,
+    to: 'qoobeethegreat@gmail.com',
+    subject: 'Please confirm your email for opusteno.io',
+    text:
+      '<a href="https://link.com">This is a lilnk to the confirmation thing</a>'
+  }
+
+  // sending da mail
   transporter.sendMail(mailOptions, (err, data) => {
     if (err) {
+      // if shit fucks up send the appropriate errors
       console.log(`An error has occured: \n ${err}`)
       let error = {
         message: err,
         code: 1004
       }
-      return error
+      return error 
     } else {
-      if (process.env.MODE === 'dev') console.log(data)
+      // And if shit doesn't fuck up enjoy rainbows
+      // Also console log the information
+      //
+      // TODO: ADAPT MAIL SENDING THIS INTO ANOTHER FUNCTION
       return null
     }
   })
