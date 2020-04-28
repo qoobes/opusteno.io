@@ -37,6 +37,10 @@ router.get('/form', isConfirmed, (req, res, next) => {
 router.post('/auth', (req, res, next) => {
   const confirmed = req.session.verified === undefined ? false : req.session.verified.state // check if  user is confirmed
   if (confirmed) res.redirect('form') // if they are redirect to /form
+  let lastAttemptTime = Date.now() - req.session.lastAttempt
+  if (lastAttemptTime < 60000) res.send(`Please wait another ${60 - (Math.round(lastAttemptTime / 1000))} seconds`)
+
+  req.session.lastAttempt = Date.now()
 
   //  Getting the email
   let email = req.body.email
