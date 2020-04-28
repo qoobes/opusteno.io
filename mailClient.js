@@ -11,8 +11,20 @@ const transporter = nodemailer.createTransport({
   }
 })
 
-const secret = process.env.CONFIRM_SECRET
+// Little helper function
+function is2gimnazija(email) {
+  const mailHost = email.substring(email.length - 18)
+  return mailHost.toLowerCase() === '@2gimnazija.edu.ba'
+}
+
+const secret = process.env.JWT_SECRET // JWT Secret, will be used once i implement it
+
+// TODO:
+// Make authentication work
+// implement emails not being sent twice in a row
+
 const sendConfirmation = email => {
+  if (!is2gimnazija(email)) return { code: 1005, message: 'Not a 2gimnazija email' }
   let mailOptions = {
     from,
     to: email,
@@ -24,7 +36,8 @@ const sendConfirmation = email => {
     if (err) {
       console.log(`An error has occured: \n ${err}`)
       let error = {
-        message: err
+        message: err,
+        code: 1004
       }
       return error
     } else {

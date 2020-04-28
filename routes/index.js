@@ -36,6 +36,7 @@ router.post('/auth', (req, res, next) => {
   // Send the confirmation mail
   let error = mailClient(email)
   if (error) {
+    if (error.message === 1005) res.send(error.message)
     console.log(error.message)
     if (process.env.MODE === 'dev') res.send(error.message)
   } else res.send('success')
