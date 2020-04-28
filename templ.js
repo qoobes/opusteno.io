@@ -7,7 +7,7 @@ const inputValue = `
  </div>
    <br>
  <br>
-   <a href="form"><button formaction="form" class="basicButton">POSALJI MAIL</button></a>
+   <button formaction="auth" class="basicButton">POSALJI MAIL</button>
 </form>
 `
 
