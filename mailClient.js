@@ -6,7 +6,7 @@ let from = 'qoobestestmail@gmail.com'
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: process.env.MAIL_ADDRESS,
+    user: process.env.MAIL_ADDR,
     pass: process.env.MAIL_PASS
   }
 })
@@ -23,8 +23,14 @@ const sendConfirmation = email => {
   transporter.sendMail(mailOptions, (err, data) => {
     if (err) {
       console.log(`An error has occured: \n ${err}`)
-      return false
-    } else return true
+      let error = {
+        message: err
+      }
+      return error
+    } else {
+      if (process.env.MODE === 'dev') console.log(data)
+      return null
+    }
   })
 }
 
