@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const temps = require('../templ')
+const mailClient = require('../mailClient')
 
 // The Simple routes
 
@@ -21,6 +22,15 @@ router.get('/about', (req, res, next) => {
 
 router.get('/form', isConfirmed, (req, res, next) => {
   res.render('form', { temps })
+})
+
+router.post('/auth', (req, res, next) => {
+  const confirmed = req.session.verified === undefined ? false : req.session.verified.state
+  if (confirmed) res.redirect('form')
+  
+  // Send the confirmation mail
+  mailClient.sendConfirmation()
+
 })
 
 module.exports = router;
