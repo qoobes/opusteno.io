@@ -24,13 +24,24 @@ router.get('/form', isConfirmed, (req, res, next) => {
   res.render('form', { temps })
 })
 
+// Auth endpoint
 router.post('/auth', (req, res, next) => {
-  const confirmed = req.session.verified === undefined ? false : req.session.verified.state
-  if (confirmed) res.redirect('form')
+  const confirmed = req.session.verified === undefined ? false : req.session.verified.state // check if  user is confirmed
+  if (confirmed) res.redirect('form') // if they are redirect to /form
+
+  //  Getting the email
+  let email = req.body.email
+  console.log(email)
   
   // Send the confirmation mail
-  mailClient.sendConfirmation()
+  let error = mailClient(email)
+  if (error) {
+    console.log(error.message)
+    if (process.env.MODE === 'dev') res.send(error.message)
+  } else res.send('success')
 
 })
+
+router.post('/auth/:token', (res, req) => {}) // method for the confimration
 
 module.exports = router;
