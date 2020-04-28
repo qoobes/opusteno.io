@@ -32,7 +32,7 @@ const sendConfirmation = (email, sentMails, sentMailTimestamps) => {
   if (mailIndex !== -1) {
     let age = Date.now() - sentMailTimestamps[mailIndex] // Get the sentmail's age
     // If it's younger than 5 minutes, tell user to wait
-    if (age < 300000) return {code: 1010, message: 'Wait 5 minutes to send another mail.'}
+    if (age < 60000) return {code: 1010, message: `Please wait another ${60 - (Math.round(lastAttemptTime / 1000))} seconds`}
     // Remove the email and timestamp from the lit
     sentMails.splice(mailIndex)
     sentMailTimestamps.splice(mailIndex)
