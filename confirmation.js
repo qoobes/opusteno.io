@@ -221,7 +221,7 @@ return `
         <td>&nbsp;</td>
         <td class="container">
           <div class="content">
-            <span class="preheader">Subscribe to Coloured.com.ng mailing list</span>
+            <span class="preheader">Welcome to opusteno.io</span>
             <table class="main">
 
               <!-- START MAIN CONTENT AREA -->
@@ -239,7 +239,7 @@ return `
                                 <table border="0" cellpadding="0" cellspacing="0">
                                   <tbody>
                                     <tr>
-                                      <td> <a href="http://${uri}/auth/verify/${token}" target="_blank">Confirm email</a> </td>
+                                      <td> <a href="http://${uri}/auth/${token}" target="_blank">Confirm email</a> </td>
                                     </tr>
                                   </tbody>
                                 </table>
