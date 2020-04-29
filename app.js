@@ -5,10 +5,16 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const expressSession = require('express-session')
+const mongoose = require('mongoose')
 
 const indexRouter = require('./routes/index');
 
 const app = express();
+
+// Mongoose setup
+const uri = process.env.MONGOOSE_URI
+mongoose.Promise = global.Promise
+mongoose.connect(uris, { useNewUrlParser: true, useUnifiedTopology: true })
 
 // env vars
 const cookieSecret = process.env.COOKIE_SECRET
