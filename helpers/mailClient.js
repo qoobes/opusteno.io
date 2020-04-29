@@ -1,6 +1,6 @@
 const nodemailer = require('nodemailer')
 const jwt = require('jsonwebtoken')
-const confirmatonTemplate = require('./confirmation')
+const confirmatonTemplate = require('../helpers/confirmation')
 
 require('dotenv').config()
 

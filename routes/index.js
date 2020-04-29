@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
-const temps = require('../templ')
-const mailClient = require('../mailClient')
+const temps = require('../helpers/templ')
+const mailClient = require('../helpers/mailClient')
 const jwt = require('jsonwebtoken')
 const randomstring = require('randomstring')
 const secret = process.env.JWT_SECRET // JWT Secret, will be used once i implement it
