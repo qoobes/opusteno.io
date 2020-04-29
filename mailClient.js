@@ -29,29 +29,33 @@ const secret = process.env.JWT_SECRET // JWT Secret, will be used once i impleme
 // implement emails not being sent twice in a row
 // Make authentication work
 
-
-const sendConfirmation = (email, sentMails, sentMailTimestamps) => {
-  if (!is2gimnazija(email)) return { code: 1005, message: 'Not a 2gimnazija email' }
+const sendConfirmation = (email, sentMails, sentMailTimestamps, salt) => {
+  if (!is2gimnazija(email))
+    return { code: 1005, message: 'Not a 2gimnazija email' }
 
   let mailIndex = sentMails.indexOf(email) // Get where the mail is; returns -1 if not found
 
   if (mailIndex !== -1) {
     let age = Date.now() - sentMailTimestamps[mailIndex] // Get the sentmail's age
     // If it's younger than 5 minutes, tell user to wait
-    if (age < 60000) return {code: 1010, message: `Please wait another ${60 - (Math.round(lastAttemptTime / 1000))} seconds`}
+    if (age < 60000)
+      return {
+        code: 1010,
+        message: `Please wait another ${60 -
+          Math.round(lastAttemptTime / 1000)} seconds`
+      }
     // Remove the email and timestamp from the lit
     sentMails.splice(mailIndex)
     sentMailTimestamps.splice(mailIndex)
   }
 
-  // Getting the data im gonna be sending, ie a thing with a JWT token inside of it 
+  // Getting the data im gonna be sending, ie a thing with a JWT token inside of it
   let payload = {
     email,
-    exp: Date.now() + 7200000,
-    sauce
+    exp: Date.now() + 7200000
   }
-
-  const token = jwt.sign(payload, secret)
+  let saltySecret = secret + salt
+  const token = jwt.sign(payload, saltySecret)
 
   // The content
   // Just where we sending to bois
@@ -72,14 +76,14 @@ const sendConfirmation = (email, sentMails, sentMailTimestamps) => {
         message: err,
         code: 1004
       }
-      return error 
+      return { success: 'false', error }
     } else {
       // And if shit doesn't fuck up enjoy rainbows
       // Also console log the information
       //
       // TODO: ADAPT MAIL SENDING THIS INTO ANOTHER FUNCTION
-      console.log(data)
-      return null
+      console.log("Im the one saying ", data)
+      return { success: 'true', token }
     }
   })
 }
