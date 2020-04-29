@@ -1,4 +1,7 @@
 const nodemailer = require('nodemailer')
+const jwt = require('jsonwebtoken')
+const confirmatonTemplate = require('./confirmation')
+
 require('dotenv').config()
 
 let from = 'qoobestestmail@gmail.com'
@@ -10,6 +13,9 @@ const transporter = nodemailer.createTransport({
     pass: process.env.MAIL_PASS
   }
 })
+
+const sauce = process.env.SAUCE
+const uri = 'localhost:3000'
 
 // Little helper function
 function is2gimnazija(email) {
@@ -38,14 +44,23 @@ const sendConfirmation = (email, sentMails, sentMailTimestamps) => {
     sentMailTimestamps.splice(mailIndex)
   }
 
+  // Getting the data im gonna be sending, ie a thing with a JWT token inside of it 
+  let payload = {
+    email,
+    exp: Date.now() + 7200000,
+    sauce
+  }
+
+  const token = jwt.sign(payload, secret)
+
+  // The content
   // Just where we sending to bois
   let mailOptions = {
     from,
     // to: email,
     to: 'qoobeethegreat@gmail.com',
-    subject: 'Please confirm your email for opusteno.io',
-    text:
-      '<a href="https://link.com">This is a lilnk to the confirmation thing</a>'
+    subject: 'Email #2 confirmation for opusteno.io',
+    html: confirmatonTemplate(uri, token)
   }
 
   // sending da mail
@@ -63,6 +78,7 @@ const sendConfirmation = (email, sentMails, sentMailTimestamps) => {
       // Also console log the information
       //
       // TODO: ADAPT MAIL SENDING THIS INTO ANOTHER FUNCTION
+      console.log(data)
       return null
     }
   })
