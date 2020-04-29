@@ -1,4 +1,5 @@
 const title = "opusteno.io"
+
 const inputValue = `
 <form method="post">
   <br>
@@ -10,6 +11,20 @@ const inputValue = `
    <button formaction="auth" class="basicButton">POSALJI MAIL</button>
 </form>
 `
+
+const emailInput = email => {
+return `
+<form method="post">
+  <br>
+ <div class="col-12">
+  <input class="disabled" id="email" name="email" type="email" value="${email}">
+ </div>
+   <br>
+ <br>
+   <button formaction="auth" class="basicButton">NASTAVI DALJE</button>
+</form>
+`
+}
 
 const head = `
     <head>
@@ -65,6 +80,7 @@ module.exports = {
   inputValue,
   head,
   navbar,
-  footer
+  footer,
+  emailInput
   // The entire head section of the site
 }
