@@ -76,14 +76,14 @@ const sendConfirmation = (email, sentMails, sentMailTimestamps, salt) => {
         message: err,
         code: 1004
       }
-      return { success: 'false', error }
+      return { success: false, error }
     } else {
       // And if shit doesn't fuck up enjoy rainbows
       // Also console log the information
       //
       // TODO: ADAPT MAIL SENDING THIS INTO ANOTHER FUNCTION
-      console.log("Im the one saying ", data)
-      return { success: 'true', token }
+      console.log(data)
+      return { success: true, token }
     }
   })
 }
