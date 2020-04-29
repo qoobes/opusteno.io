@@ -6,9 +6,9 @@ const jwt = require('jsonwebtoken')
 const randomstring = require('randomstring')
 const secret = process.env.JWT_SECRET // JWT Secret, will be used once i implement it
 
-// Setting up the list of mails 
+// Setting up the list of mails
 // This is not supposed to be persistent for longer than 5 minutes, so keeping it ram is okay
-// It's a hacky solution to a rpbolem lolo lol ol ol o lo
+// It's a hacky solution to a rpbolem lolo lol ol ol o lo
 var sentMails = new Array()
 var sentMailTimestamps = new Array()
 
@@ -16,52 +16,84 @@ var sentMailTimestamps = new Array()
 var authedJWT = new Array()
 var authedJWTsalts = new Array()
 
-// The Simple routes
+// Little helper function
+function is2gimnazija(email) {
+  const mailHost = email.substring(email.length - 18)
+  return mailHost.toLowerCase() === '@2gimnazija.edu.ba'
+}
 
-function isConfirmed (req, res, next) {
-    const confirmed = req.session.verified === undefined ? false : req.session.verified.state
-    if (!confirmed) next({ message: 'Vas token nije validan', status: '403'  })
-    else next()
+// The Simple routes
+//
+function isConfirmed(req) {
+  return req.session.verified === undefined ? false : req.session.verified.state
+}
+
+function isConfirmedMiddleware(req, res, next) {
+  const confirmed =
+    req.session.verified === undefined ? false : req.session.verified.state
+  if (!confirmed) next({ message: 'Vas token nije validan', status: '403' })
+  else next()
 }
 
 router.get('/', (req, res, next) => {
   // I will override the inputValue part of temps if the user already has a session
-  res.render('index', { temps })
+  let inputValue = temps.inputValue
+  if (isConfirmed(req)) {
+    console.log('yeah')
+    inputValue = temps.emailInput(req.session.verified.email)
+  } // else inputValue = temps.inputValue
+
+  console.log(`this is strictly temps: ${temps.inputValue}`)
+  res.render('index', { temps, inputValue })
 })
 
 router.get('/about', (req, res, next) => {
   res.render('about', { temps })
 })
 
-router.get('/form', isConfirmed, (req, res, next) => {
+router.get('/form', isConfirmedMiddleware, (req, res, next) => {
   res.render('form', { temps })
 })
 
 // Auth endpoint
 router.post('/auth', (req, res, next) => {
-  const confirmed = req.session.verified === undefined ? false : req.session.verified.state // check if  user is confirmed
-  if (confirmed) res.redirect('form') // if they are redirect to /form
-  let lastAttemptTime = Date.now() - req.session.lastAttempt
-  if (lastAttemptTime < 60000) res.send(`Please wait another ${60 - (Math.round(lastAttemptTime / 1000))} seconds`)
-
-  req.session.lastAttempt = Date.now()
+  if (isConfirmed(req) && req.session.verified.email === req.body.email)
+    res.redirect('form') // if they are redirect to /form
 
   //  Getting the email
   let email = req.body.email
-  
-  // Generating the special salt 
-  let salt = randomstring.generate(7) 
-  
+
+  if (!is2gimnazija(email)) res.send('not a 2gimnazija mail')
+
+  let lastAttemptTime = Date.now() - req.session.lastAttempt
+  if (lastAttemptTime < 60000)
+    res.send(
+      `Please wait another ${60 - Math.round(lastAttemptTime / 1000)} seconds`
+    )
+
+  req.session.lastAttempt = Date.now()
+
+  // Generating the special salt
+  let salt = randomstring.generate(7)
+
   // Send the confirmation mail
   var mailed = mailClient(email, sentMails, sentMailTimestamps, salt)
 
   let mail1 = sentMails.push(email)
   let mail2 = sentMailTimestamps.push(Date.now())
-  if (mail1 !== mail2) console.log('%c BIG ASS FUCKING ERROR WITH THE MAIL LIST', 'color:red; background-color: black;') // safety mechanism 
+  if (mail1 !== mail2)
+    console.log(
+      '%c BIG ASS FUCKING ERROR WITH THE MAIL LIST',
+      'color:red; background-color: black;'
+    ) // safety mechanism
 
   let token1 = authedJWT.push(mailed.token)
   let token2 = authedJWTsalts.push(salt)
-  if (token1 !== token2) console.log('%c BIG ASS FUCKING ERROR WITH THE TOKEN LIST', 'color:red; background-color: black;') // safety mechanism 
+  if (token1 !== token2)
+    console.log(
+      '%c BIG ASS FUCKING ERROR WITH THE TOKEN LIST',
+      'color:red; background-color: black;'
+    ) // safety mechanism
 
   res.send('success')
 })
@@ -72,15 +104,14 @@ router.get('/auth/:token', (req, res) => {
   let salt = authedJWTsalts[tokenIndex]
 
   if (tokenIndex === -1) res.send('Token no existed')
-    else {
-     authedJWT.splice(tokenIndex)
-     authedJWTsalts.splice(tokenIndex)
-    }
+  else {
+    authedJWT.splice(tokenIndex)
+    authedJWTsalts.splice(tokenIndex)
+  }
 
   let saltySecret = secret + salt
   console.log(`Salt number 2: ${saltySecret}`)
 
-    
   jwt.verify(token, saltySecret, (err, data) => {
     if (err) res.send(err)
     else {
@@ -93,9 +124,7 @@ router.get('/auth/:token', (req, res) => {
       }
       res.redirect('/form')
     }
-  })   
-
-
+  })
 }) // method for the confimration
 
-module.exports = router;
+module.exports = router
