@@ -54,34 +54,33 @@ router.post('/auth', (req, res, next) => {
   
   // Send the confirmation mail
   var mailed = mailClient(email, sentMails, sentMailTimestamps, salt)
-  console.log(mailed)
 
-  if (!mailed.success) {
-    if (mailed.error.message === 1005) res.send(mailed.error.message)
-    if (process.env.MODE === 'dev') res.send(mailed.error.message)
-  } else {
-    let mail1 = sentMails.push(email)
-    let mail2 = sentMailTimestamps.push(Date.now())
-    if (mail1 !== mail2) console.log('BIG ASS FUCKING ERROR WITH THE MAIL LIST') // safety mechanism
+  let mail1 = sentMails.push(email)
+  let mail2 = sentMailTimestamps.push(Date.now())
+  if (mail1 !== mail2) console.log('%c BIG ASS FUCKING ERROR WITH THE MAIL LIST', 'color:red; background-color: black;') // safety mechanism 
 
-    let token1 = authedJWT.push(mailed.token)
-    let token2 = authedJWTsalts.push(salt)
-    if (token1 !== token2) console.log('BIG ASS FUCKING ERROR WITH THE TOKEN LIST') // safety mechanism 
+  let token1 = authedJWT.push(mailed.token)
+  let token2 = authedJWTsalts.push(salt)
+  if (token1 !== token2) console.log('%c BIG ASS FUCKING ERROR WITH THE TOKEN LIST', 'color:red; background-color: black;') // safety mechanism 
 
-    res.send('success')
-  }
-
+  res.send('success')
 })
 
 router.get('/auth/:token', (req, res) => {
   const token = req.params.token
   let tokenIndex = authedJWT.indexOf(token)
+  let salt = authedJWTsalts[tokenIndex]
 
   if (tokenIndex === -1) res.send('Token no existed')
+    else {
+     authedJWT.splice(tokenIndex)
+     authedJWTsalts.splice(tokenIndex)
+    }
 
-  let salt = authedJWTsalts[tokenIndex]
-  let saltySecret = secret+salt
+  let saltySecret = secret + salt
+  console.log(`Salt number 2: ${saltySecret}`)
 
+    
   jwt.verify(token, saltySecret, (err, data) => {
     if (err) res.send(err)
     else {
