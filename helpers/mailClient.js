@@ -17,11 +17,6 @@ const transporter = nodemailer.createTransport({
 const sauce = process.env.SAUCE
 const uri = 'localhost:3000'
 
-// Little helper function
-function is2gimnazija(email) {
-  const mailHost = email.substring(email.length - 18)
-  return mailHost.toLowerCase() === '@2gimnazija.edu.ba'
-}
 
 const secret = process.env.JWT_SECRET // JWT Secret, will be used once i implement it
 
@@ -30,8 +25,6 @@ const secret = process.env.JWT_SECRET // JWT Secret, will be used once i impleme
 // Make authentication work
 
 const sendConfirmation = (email, sentMails, sentMailTimestamps, salt) => {
-  if (!is2gimnazija(email))
-    return { code: 1005, message: 'Not a 2gimnazija email' }
 
   let mailIndex = sentMails.indexOf(email) // Get where the mail is; returns -1 if not found
 
@@ -42,7 +35,7 @@ const sendConfirmation = (email, sentMails, sentMailTimestamps, salt) => {
       return {
         code: 1010,
         message: `Please wait another ${60 -
-          Math.round(lastAttemptTime / 1000)} seconds`
+          Math.round(age / 1000)} seconds`
       }
     // Remove the email and timestamp from the lit
     sentMails.splice(mailIndex)
