@@ -4,6 +4,8 @@ const temps = require('../helpers/templ')
 const mailClient = require('../helpers/mailClient')
 const jwt = require('jsonwebtoken')
 const randomstring = require('randomstring')
+const mongroller = require('../controllers/mongoController')
+
 const secret = process.env.JWT_SECRET // JWT Secret, will be used once i implement it
 
 // Setting up the list of mails
@@ -82,7 +84,7 @@ router.post('/auth', (req, res, next) => {
   let mail1 = sentMails.push(email)
   let mail2 = sentMailTimestamps.push(Date.now())
   if (mail1 !== mail2)
-    console.log(
+    console.error(
       '%c BIG ASS FUCKING ERROR WITH THE MAIL LIST',
       'color:red; background-color: black;'
     ) // safety mechanism
@@ -90,7 +92,7 @@ router.post('/auth', (req, res, next) => {
   let token1 = authedJWT.push(mailed.token)
   let token2 = authedJWTsalts.push(salt)
   if (token1 !== token2)
-    console.log(
+    console.error(
       '%c BIG ASS FUCKING ERROR WITH THE TOKEN LIST',
       'color:red; background-color: black;'
     ) // safety mechanism
@@ -110,13 +112,12 @@ router.get('/auth/:token', (req, res) => {
   }
 
   let saltySecret = secret + salt
-  console.log(`Salt number 2: ${saltySecret}`)
-
   jwt.verify(token, saltySecret, (err, data) => {
     if (err) res.send(err)
     else {
       if (data.exp < Date.now()) res.send('Expired email')
       let bindedEmail = data.email
+      if (!mongroller.exists(bindedEmail)) mongroller.addUser(bindedEmail)
 
       req.session.verified = {
         state: true,
