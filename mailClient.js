@@ -55,6 +55,7 @@ const sendConfirmation = (email, sentMails, sentMailTimestamps, salt) => {
     exp: Date.now() + 7200000
   }
   let saltySecret = secret + salt
+  console.log(`Salt number 1: ${saltySecret}`)
   const token = jwt.sign(payload, saltySecret)
 
   // The content
@@ -66,6 +67,8 @@ const sendConfirmation = (email, sentMails, sentMailTimestamps, salt) => {
     subject: 'Email #2 confirmation for opusteno.io',
     html: confirmatonTemplate(uri, token)
   }
+  
+  var returnData
 
   // sending da mail
   transporter.sendMail(mailOptions, (err, data) => {
@@ -76,16 +79,17 @@ const sendConfirmation = (email, sentMails, sentMailTimestamps, salt) => {
         message: err,
         code: 1004
       }
-      return { success: false, error }
+      returnData =  { success: false, error }
     } else {
       // And if shit doesn't fuck up enjoy rainbows
       // Also console log the information
       //
       // TODO: ADAPT MAIL SENDING THIS INTO ANOTHER FUNCTION
       console.log(data)
-      return { success: true, token }
     }
   })
+  returnData = { success: true, token }
+  return returnData
 }
 
 module.exports = sendConfirmation
