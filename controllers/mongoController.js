@@ -1,15 +1,27 @@
 const mongoose = require('mongoose')
-const User = mongoose.model(User)
+const UserModel = require('../models/user')
+const User = mongoose.model('User')
 
-exports.addUser = new Promise(email => {
-  const new_user = new User({ email })
-  new_user.save((err) => { // Optional event thing
+exports.exists = email => {
+  User.exists({ email }, (err, result) => {
     if (err) {
-      consoel.log(err)
-      Promise.reject(false)
+      console.error(err)
+      return false
     } else {
-      console.log(`Created a user for ${email}`)
-      Promise.resolve(true)
+      return result
     }
   })
-})
+}
+
+exports.addUser = email => {
+  const new_user = new User({ email })
+  new_user.save((err, event) => { 
+    if (err) {
+      console.error(err)
+      return false 
+    } else {
+      console.log(`Created a user for ${event.email}`)
+      return event
+    }
+  })
+}
