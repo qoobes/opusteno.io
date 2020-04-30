@@ -5,6 +5,7 @@ const mailClient = require('../helpers/mailClient')
 const jwt = require('jsonwebtoken')
 const randomstring = require('randomstring')
 const mongroller = require('../controllers/mongoController')
+const shooter = require('../controllers/shooter')
 
 const secret = process.env.JWT_SECRET // JWT Secret, will be used once i implement it
 
@@ -24,6 +25,9 @@ function is2gimnazija(email) {
   return mailHost.toLowerCase() === '@2gimnazija.edu.ba'
 }
 
+// Send secret
+let sendSecret = process.env.SEND_SECRET
+ 
 // The Simple routes
 //
 function isConfirmed(req) {
@@ -41,11 +45,9 @@ router.get('/', (req, res, next) => {
   // I will override the inputValue part of temps if the user already has a session
   let inputValue = temps.inputValue
   if (isConfirmed(req)) {
-    console.log('yeah')
     inputValue = temps.emailInput(req.session.verified.email)
   } // else inputValue = temps.inputValue
 
-  console.log(`this is strictly temps: ${temps.inputValue}`)
   res.render('index', { temps, inputValue })
 })
 
@@ -53,8 +55,16 @@ router.get('/about', (req, res, next) => {
   res.render('about', { temps })
 })
 
-router.get('/form', isConfirmedMiddleware, (req, res, next) => {
+// router.get('/form', isConfirmedMiddleware, (req, res, next) => {
+//   res.render('form', { temps })
+// })
+router.get('/form', (req, res, next) => {
   res.render('form', { temps })
+})
+
+// reminder lock up the form get method
+router.post('/form', (req, res, next) => {
+  console.log(`Form speaking: ${shooter.sendMessage(req, res, sendSecret)}`)
 })
 
 // Auth endpoint
@@ -79,7 +89,7 @@ router.post('/auth', (req, res, next) => {
   let salt = randomstring.generate(7)
 
   // Send the confirmation mail
-  var mailed = mailClient(email, sentMails, sentMailTimestamps, salt)
+  var mailed = mailClient.sendConfirmation(email, sentMails, sentMailTimestamps, salt)
 
   let mail1 = sentMails.push(email)
   let mail2 = sentMailTimestamps.push(Date.now())
@@ -101,6 +111,7 @@ router.post('/auth', (req, res, next) => {
 })
 
 router.get('/auth/:token', (req, res) => {
+  res.redirect('/form')
   const token = req.params.token
   let tokenIndex = authedJWT.indexOf(token)
   let salt = authedJWTsalts[tokenIndex]
@@ -127,5 +138,6 @@ router.get('/auth/:token', (req, res) => {
     }
   })
 }) // method for the confimration
+
 
 module.exports = router
