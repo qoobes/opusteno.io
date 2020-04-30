@@ -17,15 +17,13 @@ const transporter = nodemailer.createTransport({
 const sauce = process.env.SAUCE
 const uri = 'localhost:3000'
 
-
 const secret = process.env.JWT_SECRET // JWT Secret, will be used once i implement it
 
 // TODO:
 // implement emails not being sent twice in a row
 // Make authentication work
 
-const sendConfirmation = (email, sentMails, sentMailTimestamps, salt) => {
-
+exports.sendConfirmation = (email, sentMails, sentMailTimestamps, salt) => {
   let mailIndex = sentMails.indexOf(email) // Get where the mail is; returns -1 if not found
 
   if (mailIndex !== -1) {
@@ -34,8 +32,7 @@ const sendConfirmation = (email, sentMails, sentMailTimestamps, salt) => {
     if (age < 60000)
       return {
         code: 1010,
-        message: `Please wait another ${60 -
-          Math.round(age / 1000)} seconds`
+        message: `Please wait another ${60 - Math.round(age / 1000)} seconds`
       }
     // Remove the email and timestamp from the lit
     sentMails.splice(mailIndex)
@@ -55,12 +52,12 @@ const sendConfirmation = (email, sentMails, sentMailTimestamps, salt) => {
   // Just where we sending to bois
   let mailOptions = {
     from,
-    // to: email,
-    to: 'qoobeethegreat@gmail.com',
+    to: email,
+    // to: 'qoobeethegreat@gmail.com',
     subject: 'Email #2 confirmation for opusteno.io',
     html: confirmatonTemplate(uri, token)
   }
-  
+
   var returnData
 
   // sending da mail
@@ -72,7 +69,7 @@ const sendConfirmation = (email, sentMails, sentMailTimestamps, salt) => {
         message: err,
         code: 1004
       }
-      returnData =  { success: false, error }
+      returnData = { success: false, error }
     } else {
       // And if shit doesn't fuck up enjoy rainbows
       // Also console log the information
@@ -85,4 +82,17 @@ const sendConfirmation = (email, sentMails, sentMailTimestamps, salt) => {
   return returnData
 }
 
-module.exports = sendConfirmation
+exports.send = async (mailOptions) => { 
+  return new Promise((resolve, reject) => {
+    transporter.sendMail(mailOptions, (err, data) => {
+      if (err) {
+        console.log(`An error has occured: \n ${err}`)
+        resolve(false)
+      } else {
+        console.log('sexceed')
+        // resolve({ success: true, data })
+        resolve(true)
+      }
+    })
+  })
+}
