@@ -26,6 +26,17 @@ return `
 `
 }
 
+const constructBody = body => {
+  return `
+    <h3>Type: ${body.type}</h3>
+    <h3>Ugency: ${body.urgency}</h3>
+    <br>
+    <h2>${body.subject}</h2>
+    <br>
+    <p>${body.body}</p>
+  `
+}
+
 const head = `
     <head>
         <meta charset="utf-8">
@@ -81,6 +92,7 @@ module.exports = {
   head,
   navbar,
   footer,
-  emailInput
+  emailInput,
+  constructBody
   // The entire head section of the site
 }
