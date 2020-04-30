@@ -2,8 +2,25 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
 const MessageSchema = new Schema({
-  author: String, // Optional
-  body: String,
+  author: String, // Optional - gets filled in only if annonimity is false
+  type: {
+    type: String,
+    enum: ['undefined', 'prijava', 'molba'],
+    default: 'undefined'
+  },
+  urgency: {
+    type: String,
+    enum: ['normal', 'high'],
+    default: 'normal'
+  },
+  subject: {
+    type: String,
+    required: 'Please enter a subject'
+  },
+  body: {
+    type: String,
+    required: 'Please enter a body'
+  },
   date_created: {
     type: Date,
     default: Date.now()
