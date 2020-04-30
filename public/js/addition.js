@@ -1,9 +1,8 @@
 function send() {
-    let approve;
-    approve = window.confirm("Jeste li sigurni da zelite poslati poruku?")
-    if (approve) {
-        alert("Poruka uspjesno poslana!")
-        //actually send the message
+    let approved = window.confirm("Jeste li sigurni da zelite poslati poruku?")
+    if (approved) {
+        const invisiButton = $("#invisiButton") 
+        invisiButton.click()
     }
 }
 
@@ -11,9 +10,6 @@ function redirect() {
     let approve;
     approve = window.confirm("Jeste li sigurni da zelite napustiti form?")
     if (approve) {
-
-
-
         var elem2 = $("#mainNav");
         var pos2 = 0;
         var id2 = setInterval(frame2, 5);
