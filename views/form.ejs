@@ -16,19 +16,20 @@
       <h2 class="page-section-heading text-left text-uppercase text-dark">Ispunite formular</h2>
       </div>
 
-      <div class="container">
+      <form method="post" class="container">
           <select name="type" id="type">
-              <option value="0">Prijava</option>
-              <option value="1">Molba</option>
+              <option value="0">¯\_(ツ)_/¯</option>
+              <option value="1">Prijava</option>
+              <option value="2">Molba</option>
           </select>
         <select name="urgency" id="urgency">
-            <option value="0">nije hitno</option>
-            <option value="1">normalno</option>
+            <option value="0">normalno</option>
+            <option value="1">nije hitno</option>
             <option value="2">veoma hitno</option>
         </select>
         
-        <input type="text" class="inputter" placeholder="Kako se osjecate?" name="title" id="title">
-        <textarea name="body" id="" cols="30" rows="7" placeholder="Ovdje upisite vasu poruku"></textarea>
+        <input type="text" name="subject" required minlength="5" class="inputter" placeholder="Kako se osjecate?"  id="title">
+        <textarea name="body" required minlength="5" cols="30" rows="7" placeholder="Ovdje upisite vasu poruku"></textarea>
 <!--        <input type="text" class="inputter" placeholder="Da li vise ljudi salju poruku? (Nabroj)" id="ljudi">-->
         <select name="anonimno" id="anonimno">
             <option value="0">Anonimno posalji poruku</option>
@@ -36,8 +37,9 @@
         </select>
           <br>
         <button class="inputter" onclick="send()" id="sendButton"> Posalji!</button>
+        <button id="invisiButton" formaction="form" style="display: none;"></button>
         <button class="inputter" onclick="redirect()" id="returnButton"> Pocetna!</button>
-        </div>
+        </form>
       </div>  
  
     
