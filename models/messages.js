@@ -5,7 +5,7 @@ const MessageSchema = new Schema({
   author: String, // Optional - gets filled in only if annonimity is false
   type: {
     type: String,
-    enum: ['undefined', 'prijava', 'molba'],
+    enum: ['blank', 'prijava', 'molba'],
     default: 'undefined'
   },
   urgency: {
