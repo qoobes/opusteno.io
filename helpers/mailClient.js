@@ -1,13 +1,13 @@
-const nodemailer = require('nodemailer')
-const jwt = require('jsonwebtoken')
-const confirmatonTemplate = require('../helpers/confirmation')
+const nodemailer = require("nodemailer")
+const jwt = require("jsonwebtoken")
+const confirmatonTemplate = require("../helpers/confirmation")
 
-require('dotenv').config()
+require("dotenv").config()
 
-let from = 'qoobestestmail@gmail.com'
+let from = "qoobestestmail@gmail.com"
 
 const transporter = nodemailer.createTransport({
-  service: 'gmail',
+  service: "gmail",
   auth: {
     user: process.env.MAIL_ADDR,
     pass: process.env.MAIL_PASS
@@ -15,7 +15,7 @@ const transporter = nodemailer.createTransport({
 })
 
 const sauce = process.env.SAUCE
-const uri = 'localhost:3000'
+const uri = "localhost:3000"
 
 const secret = process.env.JWT_SECRET // JWT Secret, will be used once i implement it
 
@@ -45,7 +45,6 @@ exports.sendConfirmation = (email, sentMails, sentMailTimestamps, salt) => {
     exp: Date.now() + 7200000
   }
   let saltySecret = secret + salt
-  console.log(`Salt number 1: ${saltySecret}`)
   const token = jwt.sign(payload, saltySecret)
 
   // The content
@@ -54,43 +53,22 @@ exports.sendConfirmation = (email, sentMails, sentMailTimestamps, salt) => {
     from,
     to: email,
     // to: 'qoobeethegreat@gmail.com',
-    subject: 'Email #2 confirmation for opusteno.io',
+    subject: "Email #2 confirmation for opusteno.io",
     html: confirmatonTemplate(uri, token)
   }
 
-  var returnData
-
-  // sending da mail
-  transporter.sendMail(mailOptions, (err, data) => {
-    if (err) {
-      // if shit fucks up send the appropriate errors
-      console.log(`An error has occured: \n ${err}`)
-      let error = {
-        message: err,
-        code: 1004
-      }
-      returnData = { success: false, error }
-    } else {
-      // And if shit doesn't fuck up enjoy rainbows
-      // Also console log the information
-      //
-      // TODO: ADAPT MAIL SENDING THIS INTO ANOTHER FUNCTION
-      console.log(data)
-    }
-  })
-  returnData = { success: true, token }
-  return returnData
+  // Sending beigns
+  exports.send(mailOptions).then(console.log(`Conf email sent`))
+  return token
 }
 
-exports.send = async (mailOptions) => { 
+exports.send = mailOptions => {
   return new Promise((resolve, reject) => {
     transporter.sendMail(mailOptions, (err, data) => {
       if (err) {
         console.log(`An error has occured: \n ${err}`)
         resolve(false)
       } else {
-        console.log('sexceed')
-        // resolve({ success: true, data })
         resolve(true)
       }
     })
