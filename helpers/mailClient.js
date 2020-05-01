@@ -19,8 +19,7 @@ const uri = "localhost:3000"
 
 const secret = process.env.JWT_SECRET // JWT Secret, will be used once i implement it
 
-// TODO:
-// implement emails not being sent twice in a row
+// TODO: implement emails not being sent twice in a row
 // Make authentication work
 
 exports.sendConfirmation = (email, sentMails, sentMailTimestamps, salt) => {
