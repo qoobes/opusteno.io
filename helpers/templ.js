@@ -13,7 +13,7 @@ const inputValue = `
 `
 
 const emailInput = email => {
-return `
+  return `
 <form method="post">
   <br>
  <div class="col-12">
@@ -49,7 +49,7 @@ const head = `
       <meta name="twitter:card" content="summary_medium_image">
       <meta name="twitter:image" content="/img/handshake.png">
       <meta name="twitter:author" content="qoobes#0904">
-    
+
       <title> ${title} </title>
       <link rel="icon" href="img/handshake.png">
       <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
@@ -59,10 +59,10 @@ const head = `
       </head>
 `
 
-  const navbar = `
+const navbar = `
     <nav class="navbar navbar-expand-lg bg-secondary text-uppercase fixed-top" id="mainNav">
         <div class="container">
-        <a class="navbar-brand js-scroll-trigger" href="#page-top">${title}</a>
+        <a class="navbar-brand js-scroll-trigger" href="/">${title}</a>
         <button class="navbar-toggler navbar-toggler-right text-uppercase font-weight-bold bg-secondary text-white rounded"
           type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive"
           aria-expanded="false" aria-label="Toggle navigation">
@@ -81,7 +81,7 @@ const head = `
       </div>
     </nav>
   `
-  const footer = `
+const footer = `
     <div class="container">
      <small>Copyright &copy; Second gimnasium of Sarajevo • ibmyp</small>
     </div>
