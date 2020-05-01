@@ -22,7 +22,7 @@ exports.sendMessage = (req, res, secret) => {
     subject: body.subject,
     body: body.body
   }
-   
+
   // type urgency subject body anonimno
 
   // Constructing for email
@@ -37,24 +37,26 @@ exports.sendMessage = (req, res, secret) => {
 
   // TODO: REMEMBER THAT HAVE THE ABILTY TO SIDPLAY SHIT WITH THIS ASYNCHRONOUSLY YEEY
   // Send mail
-  
-  // sendmail(mailOptions)
-  //   .then(data => {
-  //     // res.send(`Vasa poruka je bila uspjesno poslana na odgovarajuci email account ${data}`)
-  //     var nigga = `Vasa poruka je bila uspjesno poslana na odgovarajuci email account ${data}`
-  //   })
+  let output = ""
+
+  sendmail(mailOptions)
+    .then(data => {
+      // res.send(`Vasa poruka je bila uspjesno poslana na odgovarajuci email account ${data}`)
+       output += `Vasa poruka je bila uspjesno poslana na odgovarajuci email account ${data} \n`
+    })
 
 
   // Now it's time to update the database on what's happening
-  mongobase.createMessage(constructed)    
- // Promise.resolve(sendmail(mailOptions)).then(data => console.log(`SHIT NGIGA ${data}`))
-  
+  mongobase.createMessage(constructed).then(data => {
+    output += `Vasa poruka je bila uspjesno sinhronizirana sa bazom ${data} \n`
+    res.send(output)
+  })
 }
 
 const sendmail = async mailOptions => {
   let returnvalue
   await mailer.send(mailOptions).then(data => {
-    returnvalue = data 
+    returnvalue = data
   })
   return returnvalue
 }
@@ -62,7 +64,7 @@ const sendmail = async mailOptions => {
 const createMessage = async message => {
   let returnvalue
   await mongobase.createMessage(message).then(data => {
-    returnvalue = data 
+    returnvalue = data
   })
   return returnvalue
 }
