@@ -53,6 +53,10 @@ function isConfirmedMiddleware(req, res, next) {
   else next()
 }
 
+router.get('/display', (req, res) => {
+  res.render('display', { temps })
+})
+
 router.get("/", (req, res, next) => {
   // I will override the inputValue part of temps if the user already has a session
   let inputValue = temps.inputValue
