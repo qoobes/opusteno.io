@@ -25,6 +25,18 @@ function is2gimnazija(email) {
   return mailHost.toLowerCase() === "@2gimnazija.edu.ba"
 }
 
+function qualifications(body) {
+  if (
+    body.subject.length < 5 &&
+    body.body.length < 5 &&
+    isEmpty(body.urgency) &&
+    isEmpty(body.type)
+  )
+    return false
+  return true
+}
+
+//
 // Send secret
 let sendSecret = process.env.SEND_SECRET
 
@@ -64,6 +76,10 @@ router.get("/form", (req, res, next) => {
 
 // reminder lock up the form get method
 router.post("/form", (req, res, next) => {
+  if (!qualifications(req.body) || !isConfirmed(req)) {
+    res.send("Bad request")
+    return
+  }
   console.log(`Form speaking: ${shooter.sendMessage(req, res, sendSecret)}`) // Remove later
 })
 
@@ -83,7 +99,9 @@ router.post("/auth", (req, res, next) => {
 
   let lastAttemptTime = Date.now() - req.session.lastAttempt
   if (lastAttemptTime < 60000) {
-    res.send( `Please wait another ${60 - Math.round(lastAttemptTime / 1000)} seconds`)
+    res.send(
+      `Please wait another ${60 - Math.round(lastAttemptTime / 1000)} seconds`
+    )
     return
   }
 
