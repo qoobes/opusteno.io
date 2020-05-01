@@ -8,7 +8,7 @@
   <!-- Navigation -->
   <%- temps.navbar %>
 
-  
+
 
   <!-- About Section -->
   <section class="page-section bg-white text-dark mb-0" id="form" style="min-height: 100%;">
@@ -27,23 +27,26 @@
             <option value="1">nije hitno</option>
             <option value="2">veoma hitno</option>
         </select>
-        
+
         <input type="text" name="subject" required minlength="5" class="inputter" placeholder="Kako se osjecate?"  id="title">
         <textarea name="body" required minlength="5" cols="30" rows="7" placeholder="Ovdje upisite vasu poruku"></textarea>
-<!--        <input type="text" class="inputter" placeholder="Da li vise ljudi salju poruku? (Nabroj)" id="ljudi">-->
-        <select name="anonimno" id="anonimno">
-            <option value="0">Anonimno posalji poruku</option>
-            <option value="1">Podjeli moje informacije</option>
-        </select>
+
+        <input type="text" name="anonimno" class="inputter" placeholder="Opcionalno: Kako se zovete?" id="anonimnost">
+
+
+        <!-- <select name="anonimno" id="anonimno"> -->
+        <!--     <option value="0">Anonimno posalji poruku</option> -->
+        <!--     <option value="1">Podjeli moje informacije</option> -->
+        <!-- </select> -->
           <br>
         <button class="inputter" onclick="send()" id="sendButton"> Posalji!</button>
         <button id="invisiButton" formaction="form" style="display: none;"></button>
         <button class="inputter" onclick="redirect()" id="returnButton"> Pocetna!</button>
         </form>
-      </div>  
- 
-    
-      
+      </div>
+
+
+
     </div>
   </section>
 
