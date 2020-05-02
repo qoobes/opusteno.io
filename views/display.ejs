@@ -7,29 +7,29 @@
 <!-- Navigation -->
 <%- temps.navbar %>
 
-
-
 <!-- About Section -->
 <section class="page-section bg-white text-dark mb-0" id="form">
     <div class="container" style="text-align: center;">
         <!-- About Section Heading -->
-        <h2 class="page-section-heading text-center text-uppercase text-dark">You shouldn't be seeing this</h2>
+        <h2 class="page-section-heading text-center text-uppercase text-dark"><%= display.headText %></h2>
         <br>
         <!-- Icon Divider -->
         <div class="divider-custom divider-dark">
             <div class="divider-custom-line"></div>
-            <div class="divider-custom-icon" style="font-weight: bold;">
-                <!-- %= error.status %> -->
-                bruv
-            </div>
+            <div class="divider-custom-icon" style="font-weight: bold;"><%= display.underText %> </div>
             <div class="divider-custom-line"></div>
         </div>
-        <p class="lead">Ako mislite da je ovo problem, molimo vas da to prijavite. <br> Dugme ispod vas vraca na pocetnu stranicu!
-                <br> Sa srecom!</p>
-
+        <p class="lead"><%= display.detail %></p>
+        <% if (display.error) {%>
+        <p class="lead"><strong>If you think this is a problem, or that something is wrong, please tell us.</strong></p>
+          <%}%>
         <br>
+        <% if (display.gmail) {%>
+        <a href="https://mail.google.com" class="basicButton" target="_blank">Go to Gmail</a>
+        <%} else {%>
+        <a href="/" class="basicButton">Home Page</a>
+        <%}%>
 
-        <a href="/" class="basicButton">VRATI SE NA POCETAK!</a>
 
     </div>
 </section>
