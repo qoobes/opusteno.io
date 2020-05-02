@@ -1,11 +1,11 @@
-const express = require("express")
+const express = require('express')
 const router = express.Router()
-const temps = require("../helpers/templ")
-const mailClient = require("../helpers/mailClient")
-const jwt = require("jsonwebtoken")
-const randomstring = require("randomstring")
-const mongroller = require("../controllers/mongoController")
-const shooter = require("../controllers/shooter")
+const temps = require('../helpers/templ')
+const mailClient = require('../helpers/mailClient')
+const jwt = require('jsonwebtoken')
+const randomstring = require('randomstring')
+const mongroller = require('../controllers/mongoController')
+const shooter = require('../controllers/shooter')
 
 const secret = process.env.JWT_SECRET // JWT Secret, will be used once i implement it
 
@@ -19,10 +19,10 @@ var sentMailTimestamps = new Array()
 var authedJWT = new Array()
 var authedJWTsalts = new Array()
 
-// Little helper function
+// Little helper functionform
 function is2gimnazija(email) {
   const mailHost = email.substring(email.length - 18)
-  return mailHost.toLowerCase() === "@2gimnazija.edu.ba"
+  return mailHost.toLowerCase() === '@2gimnazija.edu.ba'
 }
 
 function qualifications(body) {
@@ -49,63 +49,78 @@ function isConfirmed(req) {
 function isConfirmedMiddleware(req, res, next) {
   const confirmed =
     req.session.verified === undefined ? false : req.session.verified.state
-  if (!confirmed) next({ message: "Vas token nije validan", status: "403" })
+  if (!confirmed) next({ message: 'Vas token nije validan', status: '403' })
   else next()
 }
 
-router.get('/display', (req, res) => {
-  res.render('display', { temps })
-})
+// router.get('/display', (req, res) => {
+// let display = {
+//   headText: 'urmom really realyl gay',
+//   underText: 'nigga2',
+//   error: false,
+//   detail: 'The niggers and the faggots are niggers'
+// }
+//   res.render('display', { temps })
+// })
 
-router.get("/", (req, res, next) => {
+router.get('/', (req, res, next) => {
   // I will override the inputValue part of temps if the user already has a session
   let inputValue = temps.inputValue
   if (isConfirmed(req)) {
     inputValue = temps.emailInput(req.session.verified.email)
   } // else inputValue = temps.inputValue
 
-  res.render("index", { temps, inputValue })
+  res.render('index', { temps, inputValue })
 })
 
-router.get("/about", (req, res, next) => {
-  res.render("about", { temps })
+router.get('/about', (req, res, next) => {
+  res.render('about', { temps })
 })
 
-// router.get('/form', isConfirmedMiddleware, (req, res, next) => {
-//   res.render('form', { temps })
+router.get('/form', isConfirmedMiddleware, (req, res, next) => {
+  res.render('form', { temps })
+})
+// router.get("/form", (req, res, next) => {
+//   res.render("form", { temps })
 // })
-router.get("/form", (req, res, next) => {
-  res.render("form", { temps })
-})
 
 // reminder lock up the form get method
-router.post("/form", (req, res, next) => {
+router.post('/form', (req, res, next) => {
   if (!qualifications(req.body) || !isConfirmed(req)) {
-    res.send("Bad request")
+    next({ head: 'Bad Request', status: '500' })
     return
   }
-  console.log(`Form speaking: ${shooter.sendMessage(req, res, sendSecret)}`) // Remove later
+ // console.log(`Form speaking: ${}`) // Remove later
+  shooter.sendMessage(req, res, next, sendSecret, req.session.verified.email)
 })
 
 // Auth endpoint
-router.post("/auth", (req, res, next) => {
+router.post('/auth', (req, res, next) => {
   if (isConfirmed(req) && req.session.verified.email === req.body.email) {
-    res.redirect("form") // if they are redirect to /form
+    res.redirect('form') // if they are redirect to /form
+    return
   }
 
   //  Getting the email
   let email = req.body.email
 
   if (!is2gimnazija(email)) {
-    res.send("not a 2gimnazija mail")
+    next({
+      head: 'Not a school email',
+      message: 'Please enter an email that belongs to Druga Gimanzija Sarajevo',
+      status: 403
+    })
     return
   }
 
   let lastAttemptTime = Date.now() - req.session.lastAttempt
   if (lastAttemptTime < 60000) {
-    res.send(
-      `Please wait another ${60 - Math.round(lastAttemptTime / 1000)} seconds`
-    )
+    let nextTime = 60 - Math.round(lastAttemptTime / 1000)
+    next({
+      head: 'Please wait',
+      message: `Please wait another ${nextTime} seconds to send another email`,
+      status: `${nextTime}s`
+    })
     return
   }
 
@@ -126,29 +141,40 @@ router.post("/auth", (req, res, next) => {
   let mail2 = sentMailTimestamps.push(Date.now())
   if (mail1 !== mail2)
     console.error(
-      "%c BIG ASS FUCKING ERROR WITH THE MAIL LIST",
-      "color:red; background-color: black;"
+      '%c BIG ASS FUCKING ERROR WITH THE MAIL LIST',
+      'color:red; background-color: black;'
     ) // safety mechanism
 
   let token1 = authedJWT.push(mailed)
   let token2 = authedJWTsalts.push(salt)
   if (token1 !== token2)
     console.error(
-      "%c BIG ASS FUCKING ERROR WITH THE TOKEN LIST",
-      "color:red; background-color: black;"
+      '%c BIG ASS FUCKING ERROR WITH THE TOKEN LIST',
+      'color:red; background-color: black;'
     ) // safety mechanism
 
-  res.send("success")
+  let display = {
+    headText: 'The email has been sent',
+    underText: 'Success',
+    error: false,
+    gmail: true,
+    detail: 'Please check your school email to find the confirmation link'
+  }
+  res.render('display', { temps, display })
   return
 })
 
-router.get("/auth/:token", (req, res) => {
+router.get('/auth/:token', (req, res) => {
   const token = req.params.token
   let tokenIndex = authedJWT.indexOf(token)
   let salt = authedJWTsalts[tokenIndex]
 
   if (tokenIndex === -1) {
-    res.send("Token no existed")
+    next({
+      head: 'Invalid Registration Link',
+      message: 'Your registration link is invalid',
+      status: '403'
+    })
     return
   } else {
     authedJWT.splice(tokenIndex)
@@ -157,20 +183,39 @@ router.get("/auth/:token", (req, res) => {
 
   let saltySecret = secret + salt
   jwt.verify(token, saltySecret, (err, data) => {
-    if (err) res.send(err)
+    if (err) console.log(`JWT Error ${err}`)
     else {
-      if (data.exp < Date.now()) res.send("Expired email")
+      if (data.exp < Date.now())
+        next({
+          head: 'Expired email',
+          message: 'Your email has expired, please re-verify it',
+          status: 403
+        })
       let bindedEmail = data.email
-      if (!mongroller.exists(bindedEmail)) mongroller.addUser(bindedEmail)
+      mongroller.exists(bindedEmail).then(exist => {
+
+      console.log(`FORM VERSION: THE USER DOES ${exist}`)
+        if (!exist) {
+          mongroller.addUser(bindedEmail)
+        }
+      })
 
       req.session.verified = {
         state: true,
         email: bindedEmail
       }
-      res.redirect("/form")
+      res.redirect('/form')
       return
     }
   })
 }) // method for the confimration
+
+const doesExist = async email => {
+  let returnvalue
+  await mongroller.exists(email).then(data => {
+    returnvalue = data
+  })
+  return returnvalue
+}
 
 module.exports = router
