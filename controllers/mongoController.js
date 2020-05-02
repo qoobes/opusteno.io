@@ -5,30 +5,35 @@ const User = mongoose.model('User')
 const Message = mongoose.model('Message')
 
 exports.exists = email => {
+  return new Promise((resolve, reject) => {
   User.exists({ email }, (err, result) => {
     if (err) {
       console.error(err)
-      return false
+      resolve(false)
     } else {
-      return result
+      console.log(`THE USER DOES ${result}`)
+      resolve(result)
     }
+  })
   })
 }
 
-exports.addUser = email => {
-  const new_user = new User({ email })
-  new_user.save((err, event) => {
-    if (err) {
-      console.error(err)
-      return false
-    } else {
-      console.log(`Created a user for ${event.email}`)
-      return event
-    }
+exports.addUser = async email => {
+  return new Promise((resolve, reject) => {
+    const new_user = new User({ email })
+    new_user.save((err, event) => {
+      if (err) {
+        console.error(err)
+        resolve(false)
+      } else {
+        console.log(`Created a user for ${event.email}`)
+        resolve(event)
+      }
+    })
   })
 }
 
-exports.createMessage = async message => {
+exports.createMessage = async (message, email) => {
   return new Promise((resolve, reject) => {
     let new_message = new Message(message)
     new_message.save((err, event) => {
@@ -37,8 +42,13 @@ exports.createMessage = async message => {
         resolve(false)
       } else {
         console.log(`A new message has been added: ${event}`)
-        resolve(event)
+        // addMessageToUser(data.id, email)
+        resolve(true)
       }
     })
   })
 }
+
+// function addMessageToUser(id) {
+//   User.findOne()
+// }
