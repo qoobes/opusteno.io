@@ -10,7 +10,7 @@ var responsible = 'qoobeethegreat@gmail.com'
 var type = ['blank', 'prijava', 'molba']
 var urgency = ['normal', 'high']
 
-exports.sendMessage = (req, res, secret) => {
+exports.sendMessage = async (req, res, next, secret, email) => {
   if (secret != process.env.SEND_SECRET) throw('BAD KEY')
 
   let body = req.body // easier access
@@ -25,10 +25,7 @@ exports.sendMessage = (req, res, secret) => {
 
   // type urgency subject body anonimno
 
-  // Constructing for email
-  let html = temps.constructBody(constructed)
-
-  let mailOptions = {
+  // Constructing for email let html = temps.constructBody(constructed) let mailOptions = {
     from: 'qoobestestmail@gmail.com',
     to: responsible,
     subject: body.subject,
@@ -37,20 +34,30 @@ exports.sendMessage = (req, res, secret) => {
 
   // TODO: REMEMBER THAT HAVE THE ABILTY TO SIDPLAY SHIT WITH THIS ASYNCHRONOUSLY YEEY
   // Send mail
-  let output = ""
 
-  sendmail(mailOptions)
+  let val1 = await sendmail(mailOptions)
     .then(data => {
-      // res.send(`Vasa poruka je bila uspjesno poslana na odgovarajuci email account ${data}`)
-       output += `Vasa poruka je bila uspjesno poslana na odgovarajuci email account ${data} \n`
+       console.log(data)
+       return true
+    }).catch(err => {
+      console.log(err)
+      return false
     })
 
 
   // Now it's time to update the database on what's happening
-  mongobase.createMessage(constructed).then(data => {
-    output += `Vasa poruka je bila uspjesno sinhronizirana sa bazom ${data} \n`
-    res.send(output)
+  let val2 = await mongobase.createMessage(constructed)
+  .then(data => {
+    console.log(data)
+    return true
+  }).catch(err => {
+      console.log(err)
+      return false
   })
+
+  if (!val1 && !val2) next({ messsage: 'Try resending your message, sorry for the distrubance' })
+
+  next({ head: 'Success', message: 'Our best carrier pigeons have delivered your message, have a good day!', error: false, status: 200 })
 }
 
 const sendmail = async mailOptions => {
