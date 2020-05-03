@@ -25,7 +25,9 @@ exports.sendMessage = async (req, res, next, secret, email) => {
 
   // type urgency subject body anonimno
 
-  // Constructing for email let html = temps.constructBody(constructed) let mailOptions = {
+  // Constructing for email
+  let html = temps.constructBody(constructed)
+  let mailOptions = {
     from: 'qoobestestmail@gmail.com',
     to: responsible,
     subject: body.subject,
@@ -37,7 +39,6 @@ exports.sendMessage = async (req, res, next, secret, email) => {
 
   let val1 = await sendmail(mailOptions)
     .then(data => {
-       console.log(data)
        return true
     }).catch(err => {
       console.log(err)
@@ -46,9 +47,8 @@ exports.sendMessage = async (req, res, next, secret, email) => {
 
 
   // Now it's time to update the database on what's happening
-  let val2 = await mongobase.createMessage(constructed)
+  let val2 = await mongobase.createMessage(constructed, email)
   .then(data => {
-    console.log(data)
     return true
   }).catch(err => {
       console.log(err)
