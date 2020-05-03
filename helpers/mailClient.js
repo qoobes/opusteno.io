@@ -15,7 +15,7 @@ const transporter = nodemailer.createTransport({
 })
 
 const sauce = process.env.SAUCE
-const uri = "localhost:3000"
+const uri = process.env.BASE_URI
 
 const secret = process.env.JWT_SECRET // JWT Secret, will be used once i implement it
 
