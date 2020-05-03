@@ -19,7 +19,7 @@ return `
         font-size: 14px;
         line-height: 1.4;
         margin: 0;
-        padding: 0; 
+        padding: 0;
         -ms-text-size-adjust: 100%;
         -webkit-text-size-adjust: 100%; }
       table {
@@ -207,7 +207,7 @@ return `
           font-size: inherit !important;
           font-weight: inherit !important;
           line-height: inherit !important;
-          text-decoration: none !important; } 
+          text-decoration: none !important; }
         .btn-primary table td:hover {
           background-color: #34495e !important; }
         .btn-primary a:hover {
@@ -239,7 +239,7 @@ return `
                                 <table border="0" cellpadding="0" cellspacing="0">
                                   <tbody>
                                     <tr>
-                                      <td> <a href="http://${uri}/auth/${token}" target="_blank">Confirm email</a> </td>
+                                      <td> <a href="https://${uri}/auth/${token}" target="_blank">Confirm email</a> </td>
                                     </tr>
                                   </tbody>
                                 </table>
@@ -249,7 +249,7 @@ return `
                         </table>
                         <p>If you received this email by mistake, simply delete it.
                         <br> Ako niste trazili ovaj email, jednostavno ga izbrisite!</>
-      
+
                       </td>
                     </tr>
                   </table>
@@ -271,7 +271,7 @@ return `
               </table>
             </div>
             <!-- END FOOTER -->
-            
+
           <!-- END CENTERED WHITE CONTAINER -->
           </div>
         </td>
