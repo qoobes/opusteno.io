@@ -47,8 +47,7 @@ function isConfirmed(req) {
 }
 
 function isConfirmedMiddleware(req, res, next) {
-  const confirmed =
-    req.session.verified === undefined ? false : req.session.verified.state
+  const confirmed = req.session.verified === undefined ? false : req.session.verified.state
   if (!confirmed) next({ message: 'Vas token nije validan', status: '403' })
   else next()
 }
@@ -90,8 +89,12 @@ router.post('/form', (req, res, next) => {
     next({ head: 'Bad Request', status: '500' })
     return
   }
- // console.log(`Form speaking: ${}`) // Remove later
-  shooter.sendMessage(req, res, next, sendSecret, req.session.verified.email)
+  let shot = shooter.sendMessage(req, res, next, sendSecret, req.session.verified.email)
+  if (shot) req.session.destroy((err, event) => {
+    if (err) {
+      console.error(`Couldn't destroy session: ${err}`)
+    }
+  })
 })
 
 // Auth endpoint
@@ -164,7 +167,7 @@ router.post('/auth', (req, res, next) => {
   return
 })
 
-router.get('/auth/:token', (req, res) => {
+router.get('/auth/:token', (req, res, next) => {
   const token = req.params.token
   let tokenIndex = authedJWT.indexOf(token)
   let salt = authedJWTsalts[tokenIndex]
@@ -183,7 +186,7 @@ router.get('/auth/:token', (req, res) => {
 
   let saltySecret = secret + salt
   jwt.verify(token, saltySecret, (err, data) => {
-    if (err) console.log(`JWT Error ${err}`)
+    if (err) console.error(`JWT Error ${err}`)
     else {
       if (data.exp < Date.now())
         next({
@@ -194,7 +197,6 @@ router.get('/auth/:token', (req, res) => {
       let bindedEmail = data.email
       mongroller.exists(bindedEmail).then(exist => {
 
-      console.log(`FORM VERSION: THE USER DOES ${exist}`)
         if (!exist) {
           mongroller.addUser(bindedEmail)
         }
