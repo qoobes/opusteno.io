@@ -83,7 +83,7 @@ const navbar = `
   `
 const footer = `
     <div class="container">
-     <small><i>Made with 💝 by Second gimnasium of Sarajevo • ibmyp</i></small>
+     <small><i>Made with 💖 by Druga Gimnazija Sarajevo • ibmyp</i></small>
     </div>
 `
 module.exports = {
