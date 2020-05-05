@@ -83,9 +83,9 @@ const navbar = `
   `
 const footer = `
     <div class="container">
-     <small>Copyright &copy; Second gimnasium of Sarajevo • ibmyp</small>
+     <small><i>Made with 💝 by Second gimnasium of Sarajevo • ibmyp</i></small>
     </div>
-  `
+`
 module.exports = {
   title,
   inputValue,
