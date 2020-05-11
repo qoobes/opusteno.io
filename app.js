@@ -16,6 +16,7 @@ const app = express()
 const uri = process.env.MONGOOSE_URI
 mongoose.Promise = global.Promise
 mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
+  .catch(error => console.log(error))
 
 // env vars
 const cookieSecret = process.env.COOKIE_SECRET
