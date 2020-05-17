@@ -8,7 +8,7 @@ const inputValue = `
  </div>
    <br>
  <br>
-   <button formaction="auth" class="basicButton">POSALJI MAIL</button>
+   <button formaction="auth" class="basicButton">SEND MAIL</button>
 </form>
 `
 
@@ -21,7 +21,7 @@ const emailInput = email => {
  </div>
    <br>
  <br>
-   <button formaction="auth" class="basicButton">NASTAVI DALJE</button>
+   <button formaction="auth" class="basicButton">CONTINUE</button>
 </form>
 `
 }
@@ -71,10 +71,10 @@ const navbar = `
         <div class="collapse navbar-collapse" id="navbarResponsive">
           <ul class="navbar-nav ml-auto">
             <li class="nav-item mx-0 mx-lg-1">
-              <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="/">Pocetna</a>
+              <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="/">Home</a>
             </li>
             <li class="nav-item mx-0 mx-lg-1">
-              <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="about">O Projektu</a>
+              <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="about">About Us</a>
             </li>
           </ul>
         </div>
