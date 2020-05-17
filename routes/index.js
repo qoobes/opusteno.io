@@ -6,6 +6,7 @@ const jwt = require('jsonwebtoken')
 const randomstring = require('randomstring')
 const mongroller = require('../controllers/mongoController')
 const shooter = require('../controllers/shooter')
+const dashboard = require('/controllers/dashboard/index')
 
 const secret = process.env.JWT_SECRET // JWT Secret, will be used once i implement it
 
@@ -219,5 +220,10 @@ const doesExist = async email => {
   })
   return returnvalue
 }
+
+router.get('/dashboard', (req, res, next) => {
+  if (req.session.teacher) dashboard.enter(req.session.teacherid)
+  else dashboard.init()
+})
 
 module.exports = router
