@@ -6,9 +6,12 @@ const jwt = require('jsonwebtoken')
 const randomstring = require('randomstring')
 const mongroller = require('../controllers/mongoController')
 const shooter = require('../controllers/shooter')
-const dashboard = require('/controllers/dashboard/index')
+const dashbardRouter = require('../dashboard/router')
 
 const secret = process.env.JWT_SECRET // JWT Secret, will be used once i implement it
+
+// Tell it to use the special dashboard router
+router.use('/dashboard', dashbardRouter)
 
 // Setting up the list of mails
 // This is not supposed to be persistent for longer than 5 minutes, so keeping it ram is okay
@@ -221,9 +224,5 @@ const doesExist = async email => {
   return returnvalue
 }
 
-router.get('/dashboard', (req, res, next) => {
-  if (req.session.teacher) dashboard.enter(req.session.teacherid)
-  else dashboard.init()
-})
 
 module.exports = router
