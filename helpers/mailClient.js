@@ -4,7 +4,7 @@ const confirmatonTemplate = require("../helpers/confirmation")
 
 require("dotenv").config()
 
-let from = "qoobestestmail@gmail.com"
+let from = process.env.MAIL_ADDR
 
 const transporter = nodemailer.createTransport({
   service: "gmail",
@@ -52,7 +52,7 @@ exports.sendConfirmation = (email, sentMails, sentMailTimestamps, salt) => {
     from,
     to: email,
     // to: 'qoobeethegreat@gmail.com',
-    subject: "Email #2 confirmation for opusteno.io",
+    subject: "Email Confirmation for Box",
     html: confirmatonTemplate(uri, token)
   }
 
