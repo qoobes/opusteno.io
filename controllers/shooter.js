@@ -4,6 +4,7 @@
 const temps = require('../helpers/templ')
 const mailer = require('../helpers/mailClient')
 const mongobase = require('../controllers/mongoController')
+const reporter = require('../helpers/report')
 require('dotenv').config()
 
 var responsible = 'qoobeethegreat@gmail.com'
@@ -15,23 +16,24 @@ exports.sendMessage = async (req, res, next, secret, email) => {
 
   let body = req.body // easier access
   // Constructing the body for the email
-  let constructed = {
-    author: body.author,
-    type: type[body.type],
-    urgency: urgency[body.urgency],
-    subject: body.subject,
-    body: body.body
-  }
+  // let constructed = {
+  //   author: body.author,
+  //   type: type[body.type],
+  //   urgency: urgency[body.urgency],
+  //   subject: body.subject,
+  //   body: body.body
+  // }
+  let constructed = reporter(body.subject, type[body.type], urgency[body.urgency], body.body, body.author)
+  console.log(constructed)
 
   // type urgency subject body anonimno
 
   // Constructing for email
-  let html = temps.constructBody(constructed)
   let mailOptions = {
-    from: 'qoobestestmail@gmail.com',
+    from: process.env.MAIL_ADDR,
     to: responsible,
     subject: body.subject,
-    html
+    html: constructed
   }
 
   // TODO: REMEMBER THAT HAVE THE ABILTY TO SIDPLAY SHIT WITH THIS ASYNCHRONOUSLY YEEY
