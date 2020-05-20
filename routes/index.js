@@ -107,6 +107,8 @@ router.post('/auth', (req, res, next) => {
   //  Getting the email
   let email = req.body.email
 
+  if (email = `sara.pitic@2gimnazija.edu.ba`) res.redirect('https://youtu.be/dQw4w9WgXcQ')
+
   if (!is2gimnazija(email)) {
     next({
       head: 'Not a school email',
