@@ -247,8 +247,7 @@ return `
                             </tr>
                           </tbody>
                         </table>
-                        <p>If you received this email by mistake, simply delete it.
-                        <br> Ako niste trazili ovaj email, jednostavno ga izbrisite!</>
+                        <p>If you received this email by mistake, simply delete it.  </p>
 
                       </td>
                     </tr>
