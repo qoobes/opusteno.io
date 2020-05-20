@@ -15,31 +15,27 @@
       <h2 class="page-section-heading text-left text-uppercase text-dark">Ispunite formular</h2>
       </div>
 
+
       <form method="post" class="container">
           <select name="type" id="type">
-              <option value="0">¯\_(ツ)_/¯</option>
-              <option value="1">Prijava</option>
-              <option value="2">Molba</option>
+              <option value="0">No Type</option>
+              <option value="1">Report</option>
+              <option value="2">Request</option>
           </select>
         <select name="urgency" id="urgency">
-            <option value="0">normalno</option>
-            <option value="1">veoma hitno</option>
+            <option value="0">Normal Urgency</option>
+            <option value="1">Urgent</option>
         </select>
 
-        <input type="text" name="subject" required minlength="5" class="inputter" placeholder="Kako se osjecate?"  id="title">
-        <textarea name="body" required minlength="5" cols="30" rows="7" placeholder="Ovdje upisite vasu poruku"></textarea>
+        <input type="text" name="subject" required minlength="5" class="inputter" placeholder="Subject"  id="title">
+        <textarea name="body" required minlength="5" cols="30" rows="7" placeholder="Enter your message here"></textarea>
 
-        <input type="text" name="anonimno" class="inputter" placeholder="Opcionalno: Kako se zovete?" id="anonimnost">
+        <input type="text" name="anonimno" class="inputter" placeholder="Optional: What's your name?" id="anonimnost">
 
-
-        <!-- <select name="anonimno" id="anonimno"> -->
-        <!--     <option value="0">Anonimno posalji poruku</option> -->
-        <!--     <option value="1">Podjeli moje informacije</option> -->
-        <!-- </select> -->
           <br>
-        <button class="inputter" onclick="send()" id="sendButton"> Posalji!</button>
+        <button class="inputter" onclick="send()" id="sendButton">Send</button>
         <button id="invisiButton" formaction="form" style="display: none;"></button>
-        <button class="inputter" onclick="redirect()" id="returnButton"> Pocetna!</button>
+        <button class="inputter" onclick="redirect()" id="returnButton">Home</button>
         </form>
       </div>
 
