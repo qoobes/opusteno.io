@@ -52,16 +52,6 @@ function isConfirmedMiddleware(req, res, next) {
   else next()
 }
 
-// router.get('/display', (req, res) => {
-// let display = {
-//   headText: 'urmom really realyl gay',
-//   underText: 'nigga2',
-//   error: false,
-//   detail: 'The niggers and the faggots are niggers'
-// }
-//   res.render('display', { temps })
-// })
-
 router.get('/', (req, res, next) => {
   // I will override the inputValue part of temps if the user already has a session
   let inputValue = temps.inputValue
@@ -79,9 +69,6 @@ router.get('/about', (req, res, next) => {
 router.get('/form', isConfirmedMiddleware, (req, res, next) => {
   res.render('form', { temps })
 })
-// router.get("/form", (req, res, next) => {
-//   res.render("form", { temps })
-// })
 
 // reminder lock up the form get method
 router.post('/form', (req, res, next) => {
