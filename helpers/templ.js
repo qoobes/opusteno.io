@@ -1,4 +1,4 @@
-const title = "opusteno.io"
+const title = "box.io"
 
 const inputValue = `
 <form method="post">
