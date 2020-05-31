@@ -24,7 +24,7 @@ exports.sendMessage = async (req, res, next, secret, email) => {
   //   body: body.body
   // }
   let constructed = reporter(body.subject, type[body.type], urgency[body.urgency], body.body, body.author)
-  console.log(constructed)
+  console.log(`The author ${body.author}`)
 
   // type urgency subject body anonimno
 
