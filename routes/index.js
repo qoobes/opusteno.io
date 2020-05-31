@@ -62,10 +62,6 @@ router.get('/', (req, res, next) => {
   res.render('index', { temps, inputValue })
 })
 
-router.get('/about', (req, res, next) => {
-  res.render('about', { temps })
-})
-
 router.get('/form', isConfirmedMiddleware, (req, res, next) => {
   res.render('form', { temps })
 })
