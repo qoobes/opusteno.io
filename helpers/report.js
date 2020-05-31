@@ -236,7 +236,7 @@ return `
                         <h2>Type: ${type}</h2>
                         <h2>Urgency: ${urgency}</h2>
 
-                        <h2>Identitet: ${identity || 'not provided'}</h2>
+                        <h2>Author: ${identity || 'Not Provided'}</h2>
 
                         <h2 style="text-align: justify; font-size: 19px;">${body}</h2>
                       </td>
